@@ -2,6 +2,7 @@
 import argparse
 import logging
 import time
+import random
 from imgurpython import ImgurClient
 from api import TelegramAPI
 

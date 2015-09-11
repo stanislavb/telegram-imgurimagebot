@@ -1,7 +1,6 @@
 import requests
 import logging
 from urllib.parse import urljoin
-import random
 
 logger = logging.getLogger()
 
