@@ -32,7 +32,6 @@ class TelegramBot:
 
     def image(self, text):
         if text is None:
-            return 'Need an argument for image search. Try "/image cute cats"'
             gallery = self.imgur_api.gallery_random()
         gallery = self.imgur_api.gallery_search(
             q=text,
