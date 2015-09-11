@@ -42,7 +42,8 @@ class TelegramBot:
             found = image.link
         else:
             found = "nothing"
-        returntext = ('Searched for {}, found {}'.format(text, found))
+        returntext = ('Searched for {}, found {} out of {} results'.format(
+            text, found, len(gallery)))
         return returntext
 
     def command(self, command, text):
