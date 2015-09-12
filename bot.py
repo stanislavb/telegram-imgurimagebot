@@ -36,7 +36,7 @@ class TelegramBot:
         gallery = self.imgur_api.gallery_search(
             q=text,
             sort='top',
-            window='month')
+            window='all')
         if gallery:
             image = random.choice(gallery)
             found = image.link
