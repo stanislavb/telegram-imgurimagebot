@@ -30,22 +30,44 @@ class TelegramBot:
             'image': self.image
         }
 
-    def image(self, text):
-        if text is None:
+    def random_gallery(self):
+        try:
             gallery = self.imgur_api.gallery_random()
-            text = 'a random image'
-        else:
+        except:
+            logger.exception('Failed to retrieve random gallery')
+            gallery = []
+        return gallery
+
+    def image_search(self, text):
+        try:
             gallery = self.imgur_api.gallery_search(
-                q=text,
+                q=None,
+                advanced={'q_any': text},
                 sort='top',
                 window='all')
+        except:
+            logger.exception('Failed to search')
+            gallery = []
+        return gallery
+
+    def image(self, text):
+        gallery = []
+        if text is not None:
+            searched = 'Searched for {}'.format(text)
+            gallery = self.image_search(text)
+        else:
+            searched = 'Searched for a random image'
+            gallery = self.random_gallery()
+        if not gallery:
+            searched = 'Found nothing for {}, searched for a random image instead'.format(text)
+            gallery = self.random_gallery()
         if gallery:
             image = random.choice(gallery)
             found = image.link
         else:
             found = "nothing"
-        returntext = ('Searched for {}, found {} out of {} results'.format(
-            text, found, len(gallery)))
+        returntext = ('{}, found {} out of {} results'.format(
+            searched, found, len(gallery)))
         return returntext
 
     def command(self, command, text):
