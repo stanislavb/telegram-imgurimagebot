@@ -33,10 +33,12 @@ class TelegramBot:
     def image(self, text):
         if text is None:
             gallery = self.imgur_api.gallery_random()
-        gallery = self.imgur_api.gallery_search(
-            q=text,
-            sort='top',
-            window='all')
+            text = 'a random image'
+        else:
+            gallery = self.imgur_api.gallery_search(
+                q=text,
+                sort='top',
+                window='all')
         if gallery:
             image = random.choice(gallery)
             found = image.link
