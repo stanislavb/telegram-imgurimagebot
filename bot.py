@@ -38,11 +38,12 @@ class TelegramBot:
             gallery = []
         return gallery
 
-    def image_search(self, text):
+    def image_search(self, text, q_any=False):
+        q_param = 'q_any' if q_any else 'q_all'
         try:
             gallery = self.imgur_api.gallery_search(
                 q=None,
-                advanced={'q_any': text},
+                advanced={q_param: text},
                 sort='top',
                 window='all')
         except:
@@ -56,17 +57,23 @@ class TelegramBot:
             searched = 'Searched for {}'.format(text)
             gallery = self.image_search(text)
         else:
+            # No text at all
             searched = 'Searched for a random image'
             gallery = self.random_gallery()
+        if not gallery and len(text.split(' ')) > 1:
+            # Try searching for any word in text
+            or_text = " OR ".join(text.split(' '))
+            searched += ', then searched for {}'.format(or_text)
+            gallery = self.image_search(text, q_any=True)
         if not gallery:
-            searched = 'Found nothing for {}, searched for a random image instead'.format(text)
+            searched += '. Found nothing, searched for a random image instead'.format(text)
             gallery = self.random_gallery()
         if gallery:
             image = random.choice(gallery)
             found = image.link
         else:
             found = "nothing"
-        returntext = ('{}, found {} out of {} results'.format(
+        returntext = ('{}. found {} out of {} results'.format(
             searched, found, len(gallery)))
         return returntext
 
